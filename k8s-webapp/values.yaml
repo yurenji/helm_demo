@@ -1,0 +1,11 @@
+webapp:
+  image: webapp:latest
+  replicas: 1
+  port: 5000
+
+postgresql:
+  enabled: true
+  auth:
+    database: mydatabase
+    username: myuser
+    password: mypassword 

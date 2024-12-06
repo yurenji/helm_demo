@@ -11,31 +11,35 @@ eval $(minikube docker-env)
 ### 3. Build the web application Docker image:
 ```bash
 cd webapp
-docker build -t webapp:latest .
+DOCKER_CONFIG=~/.docker/local docker build -t webapp:latest .
 ```
 ### 4. Add the PostgreSQL Helm repository and install PostgreSQL:
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-postgresql bitnami/postgresql
-```
-### 5. Install the PostgreSQL chart:
-```bash
-helm install postgres bitnami/postgresql \
+helm install my-postgresql bitnami/postgresql \
+  --set auth.postgresPassword=postgres \
   --set auth.database=mydatabase \
   --set auth.username=myuser \
   --set auth.password=mypassword
+# Get passwords 
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace default my-postgresql -o jsonpath="{.data.password}" | base64 -d)
+export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace default my-postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
+# port forward to the database
+kubectl port-forward --namespace default svc/my-postgresql 5432:5432 
+# connect to the database
+PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U myuser -d mydatabase -p 5432
 ```
-### 6. Install your web application chart:
+### 5. Install your web application chart:
 ```bash
 cd ../k8s-webapp
 helm install myapp .
 ```
 
-### 7. Initialize the database:
+### 6. Initialize the database:
 ```bash
 minikube service myapp-webapp
 ```
-### 8. Access the application:
+### 7. Access the application:
 ```bash
 minikube service myapp-webapp
 ```

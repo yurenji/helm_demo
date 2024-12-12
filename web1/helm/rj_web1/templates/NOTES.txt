@@ -1,0 +1,11 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your application has been deployed with the following configuration:
+- Replicas: {{ .Values.replicaCount }}
+- Service Type: {{ .Values.service.type }}
+- Service Port: {{ .Values.service.port }}
+- Node Port: {{ .Values.service.nodePort }}
+
+To access the application:
+1. If using Minikube, run: minikube service {{ .Release.Name }}-service
+2. Or access directly via NodePort: http://<node-ip>:{{ .Values.service.nodePort }} 

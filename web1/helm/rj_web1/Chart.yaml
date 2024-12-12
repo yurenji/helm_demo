@@ -1,0 +1,5 @@
+apiVersion: v2
+name: rj_web1
+description: A simple web application showing current time
+version: 0.1.0
+appVersion: "1.0.0" 

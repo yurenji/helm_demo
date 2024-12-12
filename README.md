@@ -2,7 +2,7 @@
 
 ### 1. First, install Minikube and start a local cluster:
 ```bash
-minikube start
+minikube start --driver=docker
 ```
 ### 2. Enable the Minikube Docker daemon:
 ```bash

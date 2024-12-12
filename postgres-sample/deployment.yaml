@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-postgresql
+  template:
+    metadata:
+      labels:
+        app: my-postgresql
+    spec:
+      containers:
+        - name: postgresql
+          image: bitnami/postgresql:latest # or postgres if preferred 
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_DB 
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /bitnami/postgresql/data # Adjust based on your image's requirements 
+              name: pgdata-volume 
+      volumes:
+        - name: pgdata-volume 
+          persistentVolumeClaim:
+            claimName: pgdata-claim 

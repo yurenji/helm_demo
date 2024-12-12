@@ -1,4 +1,0 @@
-apiVersion: v2
-name: k8s-webapp
-description: A simple web application with PostgreSQL
-version: 0.1.0 

@@ -12,16 +12,19 @@ docker build -t rj_web1:latest .
 
 2. Install the Helm chart:
 ```bash
-helm install rj_web1 .
+helm install mytime ./helm/rj_web1
+helm install mytime2 ./helm/rj_web1 --set service.nodePort=30002
 ```
 
 3. Access the application:
 ```bash
-minikube service rj_web1
+minikube service mytime-service
+minikube service mytime2-service
 ```
 The application will open in your default browser, showing the current time that updates every second.
 
 To uninstall the application:
 ```bash
-helm uninstall rj_web1
+helm uninstall mytime
+helm uninstall mytime2
 ```
